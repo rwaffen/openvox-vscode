@@ -1,0 +1,192 @@
+{
+  "name": "openvox-vscode",
+  "displayName": "OpenVox",
+  "description": "OpenVox Puppet DSL support for Visual Studio Code",
+  "version": "0.1.0",
+  "publisher": "voxpupuli",
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/voxpupuli/openvox-vscode"
+  },
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Linters"
+  ],
+  "keywords": [
+    "openvox",
+    "puppet",
+    "language-server",
+    "configuration-management"
+  ],
+  "activationEvents": [
+    "onLanguage:puppet",
+    "onLanguage:puppetfile",
+    "onCommand:openvox.showLanguageServerLogs"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "puppet",
+        "aliases": [
+          "OpenVox",
+          "openvox",
+          "Puppet",
+          "puppet"
+        ],
+        "extensions": [
+          ".pp",
+          ".epp"
+        ],
+        "configuration": "./languages/puppet-language-configuration.json"
+      },
+      {
+        "id": "puppetfile",
+        "aliases": [
+          "Puppetfile"
+        ],
+        "filenames": [
+          "Puppetfile"
+        ],
+        "configuration": "./languages/puppetfile-language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "puppet",
+        "scopeName": "source.puppet",
+        "path": "./syntaxes/puppet.tmLanguage"
+      },
+      {
+        "language": "puppetfile",
+        "scopeName": "source.ruby",
+        "path": "./syntaxes/puppetfile.cson.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "puppet",
+        "path": "./snippets/keywords.snippets.json"
+      },
+      {
+        "language": "puppet",
+        "path": "./snippets/openvox.snippets.json"
+      },
+      {
+        "language": "json",
+        "path": "./snippets/metadata.snippets.json"
+      },
+      {
+        "language": "puppetfile",
+        "path": "./snippets/puppetfile.snippets.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "openvox.showLanguageServerLogs",
+        "category": "OpenVox",
+        "title": "Show Language Server Logs"
+      },
+      {
+        "command": "openvox.restartLanguageServer",
+        "category": "OpenVox",
+        "title": "Restart Language Server"
+      }
+    ],
+    "configurationDefaults": {
+      "[puppet]": {
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        "files.insertFinalNewline": true
+      }
+    },
+    "configuration": {
+      "title": "OpenVox",
+      "properties": {
+        "openvox.languageServer.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable OpenVox language-server features."
+        },
+        "openvox.languageServer.path": {
+          "type": "string",
+          "default": "",
+          "description": "Optional path to openvox-languageserver. The bundled server is used by default."
+        },
+        "openvox.languageServer.rubyCommand": {
+          "type": "string",
+          "default": "",
+          "description": "Optional Ruby executable used to start the language server."
+        },
+        "openvox.languageServer.installDirectory": {
+          "type": "string",
+          "default": "",
+          "description": "OpenVox Agent installation root. The OpenVox Agent is required for language-server features. Defaults to the standard installation location."
+        },
+        "openvox.languageServer.timeout": {
+          "type": "integer",
+          "default": 10,
+          "minimum": 0,
+          "description": "Seconds the language server waits for its client connection."
+        },
+        "openvox.languageServer.logLevel": {
+          "type": "string",
+          "default": "normal",
+          "enum": [
+            "debug",
+            "normal",
+            "warning",
+            "error"
+          ],
+          "description": "Extension logging verbosity."
+        },
+        "openvox.languageServer.debugFilePath": {
+          "type": "string",
+          "default": "",
+          "description": "Optional language-server debug log file."
+        },
+        "openvox.puppet.confdir": {
+          "type": "string",
+          "default": "",
+          "description": "OpenVox configuration directory passed to the language server."
+        },
+        "openvox.puppet.environment": {
+          "type": "string",
+          "default": "",
+          "description": "OpenVox environment passed to the language server."
+        },
+        "openvox.puppet.modulePath": {
+          "type": "string",
+          "default": "",
+          "description": "Additional OpenVox module path."
+        },
+        "openvox.puppet.vardir": {
+          "type": "string",
+          "default": "",
+          "description": "OpenVox cache directory passed to the language server."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "clean": "node scripts/clean.mjs",
+    "compile": "tsc -p .",
+    "vendor": "node scripts/vendor-components.mjs",
+    "build": "npm run vendor && npm run compile",
+    "check": "npm run build && node scripts/check-package.mjs",
+    "package": "npm run build && vsce package"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/vscode": "^1.95.0",
+    "@vscode/vsce": "^3.2.1",
+    "typescript": "^5.7.0"
+  }
+}

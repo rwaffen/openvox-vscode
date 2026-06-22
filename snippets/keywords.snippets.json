@@ -1,0 +1,58 @@
+{
+  "class": {
+    "prefix": "class",
+    "body": [
+      "class ${1:name} (",
+      "  ${2}",
+      ") {",
+      "  ${0}",
+      "}"
+    ],
+    "description": "OpenVox class"
+  },
+  "defined resource type": {
+    "prefix": "define",
+    "body": [
+      "define ${1:name} (",
+      "  ${2}",
+      ") {",
+      "  ${0}",
+      "}"
+    ],
+    "description": "OpenVox defined resource type"
+  },
+  "if": {
+    "prefix": "if",
+    "body": [
+      "if ${1:condition} {",
+      "\t${2:# when true}",
+      "}",
+      "else {",
+      "\t${3:# when false}",
+      "}"
+    ],
+    "description": "Conditional statement"
+  },
+  "unless": {
+    "prefix": "unless",
+    "body": [
+      "unless ${1:condition} {",
+      "\t${2:# when false}",
+      "}",
+      "else {",
+      "\t${3:# when true}",
+      "}"
+    ],
+    "description": "Conditional statement"
+  },
+  "case": {
+    "prefix": "case",
+    "body": [
+      "case ${1:condition} {",
+      "\t'${2:value}': { ${3} }",
+      "\tdefault: { ${0} }",
+      "}"
+    ],
+    "description": "Conditional case statement"
+  }
+}

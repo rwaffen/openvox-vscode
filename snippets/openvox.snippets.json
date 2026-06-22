@@ -1,0 +1,179 @@
+{
+  "Generic resource": {
+    "prefix": "resource",
+    "body": [
+      "${1:resource_type} { '${2:title}':",
+      "  ${3:attribute} => ${4:value},",
+      "  ${0}",
+      "}"
+    ],
+    "description": "Declare a generic OpenVox resource"
+  },
+  "Resource defaults": {
+    "prefix": "resource defaults",
+    "body": [
+      "${1:Resource_type} {",
+      "  ${2:attribute} => ${3:value},",
+      "  ${0}",
+      "}"
+    ],
+    "description": "Set defaults for a resource type"
+  },
+  "File resource": {
+    "prefix": "file resource",
+    "body": [
+      "file { '${1:path}':",
+      "  ensure  => ${2:file},",
+      "  owner   => '${3:root}',",
+      "  group   => '${4:root}',",
+      "  mode    => '${5:0644}',",
+      "  content => ${0},",
+      "}"
+    ],
+    "description": "Declare a managed file"
+  },
+  "Package resource": {
+    "prefix": "package resource",
+    "body": [
+      "package { '${1:name}':",
+      "  ensure => ${2:installed},",
+      "  ${0}",
+      "}"
+    ],
+    "description": "Declare a managed package"
+  },
+  "Service resource": {
+    "prefix": "service resource",
+    "body": [
+      "service { '${1:name}':",
+      "  ensure => ${2:running},",
+      "  enable => ${3:true},",
+      "  ${0}",
+      "}"
+    ],
+    "description": "Declare a managed service"
+  },
+  "Notify resource": {
+    "prefix": "notify resource",
+    "body": [
+      "notify { '${1:message}':",
+      "  ${0}",
+      "}"
+    ],
+    "description": "Declare a notify resource"
+  },
+  "Include class": {
+    "prefix": "include class",
+    "body": [
+      "include ${1:module_name}"
+    ],
+    "description": "Include a class"
+  },
+  "Contain class": {
+    "prefix": "contain class",
+    "body": [
+      "contain ${1:module_name}"
+    ],
+    "description": "Contain a class"
+  },
+  "Resource-like class declaration": {
+    "prefix": "class resource",
+    "body": [
+      "class { '${1:module_name}':",
+      "  ${2:parameter} => ${3:value},",
+      "  ${0}",
+      "}"
+    ],
+    "description": "Declare a class with explicit parameters"
+  },
+  "Lookup value": {
+    "prefix": "lookup",
+    "body": [
+      "\\$${1:value} = lookup('${2:key}', {",
+      "  'default_value' => ${3:undef},",
+      "})",
+      "${0}"
+    ],
+    "description": "Look up a value with a default"
+  },
+  "Facts access": {
+    "prefix": "facts access",
+    "body": [
+      "\\$facts['${1:fact_name}']${0}"
+    ],
+    "description": "Access a structured fact"
+  },
+  "Selector expression": {
+    "prefix": "selector",
+    "body": [
+      "\\$${1:value} = \\$${2:expression} ? {",
+      "  '${3:match}' => ${4:result},",
+      "  default    => ${5:default_result},",
+      "}",
+      "${0}"
+    ],
+    "description": "Assign a value using a selector expression"
+  },
+  "Each lambda": {
+    "prefix": "each lambda",
+    "body": [
+      "\\$${1:items}.each |\\$${2:item}| {",
+      "  ${0}",
+      "}"
+    ],
+    "description": "Iterate over a collection with each"
+  },
+  "Map lambda": {
+    "prefix": "map lambda",
+    "body": [
+      "\\$${1:result} = \\$${2:items}.map |\\$${3:item}| {",
+      "  ${0}",
+      "}"
+    ],
+    "description": "Transform a collection with map"
+  },
+  "Puppet language function": {
+    "prefix": "function",
+    "body": [
+      "function ${1:module_name}::${2:function_name}(${3:Variant[String, Boolean]} \\$${4:value}) >> ${5:String} {",
+      "  ${0}",
+      "}"
+    ],
+    "description": "Define an OpenVox Puppet DSL function"
+  },
+  "Type alias": {
+    "prefix": "type alias",
+    "body": [
+      "type ${1:Module_name}::${2:Type_name} = ${3:String[1]}"
+    ],
+    "description": "Define a type alias"
+  },
+  "Heredoc string": {
+    "prefix": "heredoc",
+    "body": [
+      "\\$${1:content} = @(\"${2:END}\")",
+      "${3:text}",
+      "| ${2:END}",
+      "${0}"
+    ],
+    "description": "Assign a Puppet heredoc string"
+  },
+  "Package file service chain": {
+    "prefix": "package file service chain",
+    "body": [
+      "package { '${1:package}':",
+      "  ensure => installed,",
+      "}",
+      "-> file { '${2:config_path}':",
+      "  ensure => file,",
+      "  ${3}",
+      "}",
+      "~> service { '${4:service}':",
+      "  ensure => running,",
+      "  enable => true,",
+      "}",
+      "${0}"
+    ],
+    "description": "Declare a package, configuration file, and service relationship chain"
+  }
+}

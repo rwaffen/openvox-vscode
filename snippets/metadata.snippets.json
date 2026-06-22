@@ -1,0 +1,20 @@
+{
+  "OpenVox module metadata": {
+    "prefix": "metadata.json",
+    "body": [
+      "{",
+      "  \"name\": \"${1:author}-${2:module_name}\",",
+      "  \"version\": \"0.1.0\",",
+      "  \"author\": \"$1\",",
+      "  \"summary\": \"${3:brief summary}\",",
+      "  \"license\": \"${4:Apache-2.0}\",",
+      "  \"source\": \"${5:source location of the module}\",",
+      "  \"dependencies\": [",
+      "    { \"name\": \"${6:author-module}\", \"version_requirement\": \"${7:>= 1.0.0}\" }",
+      "  ]",
+      "}",
+      ""
+    ],
+    "description": "OpenVox module metadata.json"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "Forge module with version": {
+    "prefix": "Forge Module",
+    "body": [
+      "mod '${1:author}-${2:name}', '${3:version}'"
+    ],
+    "description": "Install a specific module version from the Forge"
+  },
+  "Latest Forge module": {
+    "prefix": "Latest Forge Module",
+    "body": [
+      "mod '${1:author}-${2:name}', :latest"
+    ],
+    "description": "Install the latest module version from the Forge"
+  },
+  "Git module by ref": {
+    "prefix": "Git Module by ref",
+    "body": [
+      "mod '${1:name}', :git => '${2:repository}', :ref => '${3:reference}'"
+    ],
+    "description": "Install a Git module using a reference"
+  },
+  "Git module by commit": {
+    "prefix": "Git Module by commit",
+    "body": [
+      "mod '${1:name}', :git => '${2:repository}', :commit => '${3:commit}'"
+    ],
+    "description": "Install a Git module using a commit"
+  },
+  "Git module by tag": {
+    "prefix": "Git Module by tag",
+    "body": [
+      "mod '${1:name}', :git => '${2:repository}', :tag => '${3:tag}'"
+    ],
+    "description": "Install a Git module using a tag"
+  },
+  "Git module by branch": {
+    "prefix": "Git Module by branch",
+    "body": [
+      "mod '${1:name}', :git => '${2:repository}', :branch => '${3:branch}'"
+    ],
+    "description": "Install a Git module using a branch"
+  },
+  "SVN module by revision": {
+    "prefix": "SVN Module by revision",
+    "body": [
+      "mod '${1:name}', :svn => '${2:repository}', :revision => '${3:revision}'"
+    ],
+    "description": "Install an SVN module using a revision"
+  },
+  "Local module": {
+    "prefix": "Local Module",
+    "body": [
+      "mod '${1:name}', :local => true"
+    ],
+    "description": "Use a module from the local Puppetfile module path"
+  }
+}
