@@ -51,7 +51,7 @@ jobs:
       - name: Vendor language server dependencies
         working-directory: dependencies/openvox-editor-services
         run: |
-          gem install rake --no-document
+          gem install rake rspec --no-document
           rake gem_revendor
 
       - name: Set up Node.js
