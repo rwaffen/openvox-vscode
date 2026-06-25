@@ -3,7 +3,7 @@
   "displayName": "OpenVox",
   "description": "OpenVox Puppet DSL support for Visual Studio Code",
   "version": "0.1.0",
-  "publisher": "voxpupuli",
+  "publisher": "Vox Pupuli",
   "license": "GPL-3.0-or-later",
   "icon": "images/openvox_bildmarke.png",
   "repository": {
