@@ -5,6 +5,7 @@
   "version": "0.1.0",
   "publisher": "voxpupuli",
   "license": "GPL-3.0-or-later",
+  "icon": "images/openvox_bildmarke.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/voxpupuli/openvox-vscode"
