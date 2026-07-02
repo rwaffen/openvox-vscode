@@ -1,0 +1,137 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: "20"
+  RUBY_VERSION: "3.4"
+  OPENVOX_EDITOR_SYNTAX_REF: fc73fd4e8a942dab7796017d02a98d6441c254b1
+
+jobs:
+  compile:
+    name: TypeScript compile
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out extension
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install Node.js dependencies
+        run: npm ci
+
+      - name: Compile TypeScript
+        run: npm run compile
+
+  package:
+    name: Build and verify VSIX
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      issues: write
+
+    steps:
+      - name: Check out extension
+        uses: actions/checkout@v4
+
+      - name: Check out editor syntax
+        uses: actions/checkout@v4
+        with:
+          repository: voxpupuli/openvox-editor-syntax
+          ref: ${{ env.OPENVOX_EDITOR_SYNTAX_REF }}
+          path: dependencies/openvox-editor-syntax
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install Node.js dependencies
+        run: npm ci
+
+      - name: Build and verify package contents
+        env:
+          OPENVOX_EDITOR_SYNTAX_DIR: ${{ github.workspace }}/dependencies/openvox-editor-syntax
+        run: npm run check
+
+      - name: Package VSIX
+        run: |
+          mkdir -p artifacts
+          ./node_modules/.bin/vsce package --out artifacts/openvox-vscode-ci.vsix
+
+      - name: Upload VSIX artifact
+        id: upload_artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: openvox-vscode-ci
+          path: artifacts/openvox-vscode-ci.vsix
+          if-no-files-found: error
+
+      - name: Update pull request artifact comment
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ARTIFACT_URL: ${{ steps.upload_artifact.outputs.artifact-url }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          marker="<!-- openvox-vscode-ci-artifact -->"
+          short_sha="${GITHUB_SHA::7}"
+          run_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          commit_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA}"
+
+          body="$(cat <<EOF
+          ${marker}
+          The latest VSIX build for this pull request is available below.
+
+          - [Download openvox-vscode-ci artifact](${ARTIFACT_URL})
+          - Commit: [\`${short_sha}\`](${commit_url})
+          - Workflow run: [${GITHUB_RUN_ID}](${run_url})
+
+          > GitHub login is required to download workflow artifacts. The download expires according to the repository's artifact retention policy.
+          EOF
+          )"
+
+          comment_id="$(
+            gh api "repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments" \
+              --jq ".[] | select(.body | contains(\"${marker}\")) | .id" \
+              | head -n 1
+          )"
+
+          if [[ -n "$comment_id" ]]; then
+            gh api \
+              --method PATCH \
+              "repos/${GITHUB_REPOSITORY}/issues/comments/${comment_id}" \
+              --field body="$body"
+          else
+            gh api \
+              --method POST \
+              "repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments" \
+              --field body="$body"
+          fi
