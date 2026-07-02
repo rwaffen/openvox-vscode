@@ -89,3 +89,12 @@ jobs:
           name: openvox-vscode-ci
           path: artifacts/openvox-vscode-ci.vsix
           if-no-files-found: error
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    needs:
+      - compile
+      - package
+    steps:
+      - run: echo "Test successful"
