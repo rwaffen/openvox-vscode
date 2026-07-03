@@ -58,6 +58,9 @@ VS Code extensions; it cannot install or manage the OpenVox Agent.
 
 ## Development
 
+Building requires Node.js and Ruby >= 3.4 (the version CI uses). The
+vendored `openvox-editor-services` gem does not install on older Rubies.
+
 Build the extension:
 
 ```shell
