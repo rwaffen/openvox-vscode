@@ -80,11 +80,15 @@ jobs:
           path: artifacts/openvox-vscode-ci.vsix
           if-no-files-found: error
 
-  test:
-    name: Test
-    runs-on: ubuntu-latest
+  tests:
+    name: Test suite
+    if: always()
     needs:
       - compile
       - package
+    runs-on: ubuntu-latest
     steps:
-      - run: echo "Test successful"
+      - name: Verify required jobs
+        uses: re-actors/alls-green@release/v1
+        with:
+          jobs: ${{ toJSON(needs) }}
